@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+<<<<<<< HEAD
     "preinstall": "npx npm-force-resolutions@0.0.3",
     "dev": "nodemon --exec babel-node server --delay 6s",
+=======
+    "preinstall": "npx npm-force-resolutions",
+    "dev": "nodemon --exec babel-node server --delay 4s",
+>>>>>>> db08b248414ef74ef38b35b766aefd424c7d1c41
     "migrate": "npx prisma migrate dev --preview-feature",
     "studio": "npx prisma studio"
   },
