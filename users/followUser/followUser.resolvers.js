@@ -1,4 +1,4 @@
-import client from "./client";
+import client from "../../client";
 import { protectedResolver } from "../users.utils";
 
 export default {
