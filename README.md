@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Instaclone Backend
 
 ##User:
@@ -6,20 +5,34 @@ Instaclone Backend
 [x] Create Account
 [x] See Profile
 [x] Login
-[ ] Edit Profile
-[ ] Follow User
-[ ] Unfollow User
-[ ] Change Avatar (Image Upload)
-=======
-Instaclone Backend
+[x] Edit Profile
+[x] Change Avatar (Image Upload)
+[x] Follow User
+[x] Unfollow User
+[x] See Followers w/ Pagination
+[x] See Following w/ Pagination
+[x] Computed Fields
+[x] Search Users
 
-##User:
+##Photos
 
-[x] Create Account
-[x] See Profile
-[x] Login
-[ ] Edit Profile
-[ ] Follow User
-[ ] Unfollow User
-[ ] Change Avatar (Image Upload)
->>>>>>> db08b248414ef74ef38b35b766aefd424c7d1c41
+[x] Upload Photo (Parse#)
+[x] Like / Unlike Photo
+[x] See Photo
+[x] Edit Photo
+[x] Search Photos
+[x] See Hashtagg
+[x] See Photo Likes
+[x] See photo Comment
+[x] See Feed
+[x] Is Mine (Delete Photo)
+
+##Comments
+
+[x] Comment on Photo
+[x] Edit Comment
+[x] Delete Comment
+
+##Extras
+
+[ ] S3 Image Upload
