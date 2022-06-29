@@ -1,36 +1,64 @@
-import "dotenv/config";
-import { ApolloServer } from "apollo-server-express";
-import { typeDefs, resolvers } from "./schema";
-import { getUser, protectResolver } from "./users/users.utils.js";
-import http from "http";
-import logger from "morgan";
+require("dotenv").config();
+import { createServer } from "http";
+import { execute, subscribe } from "graphql";
+import { SubscriptionServer } from "subscriptions-transport-ws";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import express from "express";
-import pubsub from "./pubusb";
+import logger from "morgan";
+import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { typeDefs, resolvers } from "./schema";
+import { getUser } from "./users/users.utils";
+import { graphqlUploadExpress } from "graphql-upload";
 
 const PORT = process.env.PORT;
-console.log(pubsub);
 
-const apollo = new ApolloServer({
-  resolvers,
-  typeDefs,
-  context: async ({ req }) => {
-    if (req) {
-      return {
-        loggedInUser: await getUser(req.headers.token),
-        protectResolver,
-      };
-    }
-  },
-});
+const startServer = async () => {
+  const app = express();
+  const httpServer = createServer(app);
+  const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  });
 
-const app = express();
-app.use(logger("tiny"));
-apollo.applyMiddleware({ app });
-app.use("/static", express.static("uploads"));
+  const subscriptionServer = SubscriptionServer.create(
+    { schema, execute, subscribe },
+    { server: httpServer }
+  ); //subscriptions 서버를 만듭니다.
 
-const httpServer = http.createServer(app);
-apollo.installSubscriptionHandlers(httpServer);
+  const server = new ApolloServer({
+    schema,
+    context: async ({ req }) => {
+      if (req) {
+        return {
+          loggedInUser: await getUser(req.headers.token),
+        };
+      }
+    },
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close();
+            },
+          };
+        },
+      },
+    ],
+  });
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}/graphql`);
-});
+  await server.start();
+
+  app.use(logger("tiny"));
+  app.use(graphqlUploadExpress());
+  server.applyMiddleware({ app });
+  app.use("/static", express.static("uploads"));
+
+  httpServer.listen(PORT, () =>
+    console.log(
+      `🚀 Server is running on http://localhost:${PORT}${server.graphqlPath} ✅`
+    )
+  );
+};
+startServer();
