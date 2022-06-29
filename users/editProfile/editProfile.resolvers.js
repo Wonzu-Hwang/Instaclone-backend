@@ -11,6 +11,7 @@ const resolverFn = async (
   { loggedInUser }
 ) => {
   let avatarUrl = null;
+  console.log(avatar);
   if (avatar) {
     avatarUrl = await uploadPhoto(avatar, loggedInUser.id);
 

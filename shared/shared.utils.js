@@ -11,7 +11,7 @@ export const uploadPhoto = async (file, userId) => {
   const { filename, createReadStream } = await file;
   const readStream = createReadStream();
   const objectName = `${userId}-${Date.now()}-${filename}`;
-  const update = await new AWS.S3()
+  const { Location } = await new AWS.S3()
     .upload({
       Bucket: "instaclone-hwang-first-bucket",
       Key: objectName,
@@ -19,6 +19,5 @@ export const uploadPhoto = async (file, userId) => {
       Body: readStream,
     })
     .promise();
-  console.log(update);
-  return "";
+  return Location;
 };
