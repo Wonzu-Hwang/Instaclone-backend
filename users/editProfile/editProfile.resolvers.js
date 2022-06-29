@@ -11,10 +11,8 @@ const resolverFn = async (
   { loggedInUser }
 ) => {
   let avatarUrl = null;
-  console.log(avatar);
   if (avatar) {
     avatarUrl = await uploadPhoto(avatar, loggedInUser.id);
-
     /* const { filename, createReadStream } = await avatar;
     const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
     const readStream = createReadStream();
